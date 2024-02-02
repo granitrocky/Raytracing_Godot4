@@ -25,7 +25,9 @@ func _ready():
 	setup_compute()
 	render()
 
-func _process(delta):
+func _physics_process(delta):
+	global_time += delta
+	$Spinning.translate(Vector2(sin(global_time) * 10, 0))
 	if submitted:
 		var status = rd.check_status()
 		if status:
@@ -145,7 +147,6 @@ func update_compute():
 	uniform_set = rd.uniform_set_create(bindings, shader, 0)
 
 func render(delta : float = 0.0):
-	global_time += delta
 	
 	# Start compute list to start recording our compute commands
 	var compute_list = rd.compute_list_begin()
@@ -175,5 +176,4 @@ func present():
 	texture_rect.set_data(byte_data)
 
 func _on_check_box_toggled(toggled_on):
-	print("toggled")
 	immediate = toggled_on
