@@ -8,6 +8,8 @@ var pipeline
 var bindings : Array
 var shader
 var output_tex : RID
+var submitted: bool = false
+var immediate: bool = false
 
 @onready var directional_light : DirectionalLight3D = $DirectionalLight3d
 @onready var texture_rect = $Camera3d/RayTracerSimple/ComputeOutput
@@ -24,8 +26,13 @@ func _ready():
 	render()
 
 func _process(delta):
-	update_compute()
-	render(delta)
+	if submitted:
+		var status = rd.check_status()
+		if status:
+			present()
+	else:
+		update_compute()
+		render(delta)
 
 func matrix_to_bytes(t : Transform3D):
 	# Helper function
@@ -147,16 +154,26 @@ func render(delta : float = 0.0):
 	# Binds the uniform set with the data we want to give our shader
 	rd.compute_list_bind_uniform_set(compute_list, uniform_set, 0)
 	# Dispatch (X,Y,Z) work groups
-	@warning_ignore(integer_division)
 	rd.compute_list_dispatch(compute_list, image_size.x / 8, image_size.y / 8, 1)
 	
 	# Tell the GPU we are done with this compute task
 	rd.compute_list_end()
 	# Force the GPU to start our commands
 	rd.submit()
+	if immediate:
+		present()
+	else:
+		submitted = true
+
+func present():
 	# Force the CPU to wait for the GPU to finish with the recorded commands
 	rd.sync()
+	submitted = false
 	
 	# Now we can grab our data from the output texture
 	var byte_data : PackedByteArray = rd.texture_get_data(output_tex, 0)
 	texture_rect.set_data(byte_data)
+
+func _on_check_box_toggled(toggled_on):
+	print("toggled")
+	immediate = toggled_on

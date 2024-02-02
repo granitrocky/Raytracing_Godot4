@@ -9,7 +9,7 @@ func _input(event):
 			rotate_y(deg_to_rad(-event.relative.x * mouse_sensitivity))
 			rotate_object_local(Vector3(1.0, 0.0, 0.0), deg_to_rad(event.relative.y * mouse_sensitivity))
 
-func _process(_delta):
+func _physics_process(_delta):
 	if Input.is_action_pressed("RMB"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	else:

@@ -52,5 +52,22 @@ text = "Right-Click and Drag Mouse to look around
 
 Use WASD and QE to move"
 
+[node name="CheckBox" type="CheckBox" parent="Camera3d/RayTracerSimple"]
+layout_mode = 0
+offset_top = 96.0
+offset_right = 24.0
+offset_bottom = 120.0
+
+[node name="Label2" type="Label" parent="Camera3d/RayTracerSimple"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 94.0
+offset_right = 198.0
+offset_bottom = 117.0
+text = "Immediate GPU Mode
+"
+
 [node name="DirectionalLight3d" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.652138, 0.4459, -0.613098, 0, 0.80873, 0.588181, 0.7581, -0.383575, 0.527403, 0, 0, 0)
+
+[connection signal="toggled" from="Camera3d/RayTracerSimple/CheckBox" to="." method="_on_check_box_toggled"]
