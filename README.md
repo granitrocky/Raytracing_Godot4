@@ -1,4 +1,6 @@
-# Raytracing using Compute Shaders! (Updated to Godot 4 beta 13)
+# Raytracing using Compute Shaders! (Updated to Godot 4.3)
+
+This is a proof of concept project demonstrating a new Vulkan GPU command `RenderingDevice::check_status()` that returns `false` if the computation is still ongoing and `true` if the computation has completed.
 
 ## Relevant files
 
